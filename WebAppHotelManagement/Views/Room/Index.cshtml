@@ -1,0 +1,268 @@
+﻿@model WebAppHotelManagement.ViewModel.RoomViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<!--Boostrap ikonlarını kullanabilmek icin bu linki yazdik ve dahil ettik.-->>
+<head>
+    <link rel="nofollow" href="https://justpaste.it/redirect/c4bxn/https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fbootstrap-icons%2Ffont%2Fbootstrap-icons.css">
+</head>
+
+<!--Asagida JavaScript kodu kullandik. Cunku daha kizli bir erisim saglamak istiyrouz. Ayrıca JavaScript ile this kodunu almis olduk-->
+<!--Hangi JavaScript kodunda oldugunu gormek istiyorsan Scripts altindaki dosyalardan bulabilirsin-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    //Sayfa yuklendiginde yapilacaklar. Girilen verileri sayfada gosterme, yeni bir oda girme, verileri kaydetme
+    //txtRoomId'nin değeri sıfıra ayarlanıyor, bu yeni bir oda eklenmesi gerektiğini gösterir.
+    $(document).ready(function () {
+        LoadRoomDetails();
+        $("#txtRoomId").val("0"); 
+        $("#btnSave").click(function () {
+            SaveRoomData();
+        });
+    });
+
+    // AJAX (Asynchronous JavaScript and XML), sayfanın yenilenmeden sunucuyla veri alışverişi yapmasını sağlar.
+    //roomId adinda parametre alir ve bu degistirlen oda icin yazilmistir.
+    //async true ile asenkron olarak yapilir, yani sayfa yuklenirken diger islemler durmaz.
+    //url istegin gonderilecegi url'yi belirtir. +roomId ile yazdigimiz queryString.
+    //succes basarili olup olmadigini gormek icin RoomController'da EditRoomDetais fonksiyonuna gider.
+    //Eger basarili olursa JSON formatinda doner ve success kismina girer. Daha sonrasinda esitlemeler yapilir.
+    //Kullanici onceden verileri girmiti. Simdi ise edite bastiginda tekrardan verilerin gelmesi gerekiyor. 
+    //Bunun icin verileri val(data.RoomNumber) diyerek cektik. Ve bunlari frontend'de gozukmesi icin txtRoomNumber'ya atadik.
+    function EditRoom(roomId) {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'json',
+            data: { roomId },
+            url: '/Room/EditRoomDetails?roomId=' + roomId,
+            success: function (data) {
+                $("#txtRoomNumber").val(data.RoomNumber);
+                $("#txtRoomPrice").val(data.RoomPrice);
+                $("#ddBookingStatus").val(data.BookingStatusId);
+                $("#ddRoomType").val(data.RoomTypeId);
+                $("#txtRoomCapacity").val(data.RoomCapacity);
+                $("#txtRoomDescription").val(data.RoomDescription);
+                $("#imgRoom").attr('src', "../RoomImages/" + data.RoomImage);
+                $("#divAddRoom").modal('show');
+                $("#txtRoomId").val(data.RoomId);
+                $("#btnSave").text("Update"); //btnSave Update olarak degistirildi
+            },
+            error: function () {
+                alert('There is some problem processing your request.');
+            }
+        });
+    }
+
+    function DeleteRoom(roomId) {
+        var result = confirm("Are you sure you want to delete this room?");
+        //Eger result false ise yani silmek istemzsen return'e girer ve hicbir sey olmaz.
+        if (!result) {  
+            return;
+        }
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'json',
+            data: { roomId },
+            url: '/Room/DeleteRoomDetails?roomId=' + roomId,
+            success: function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    LoadRoomDetails();  //Eger basirili olursa oda silinir ve tekrardan sayfadaki tablonun yuklenmesi istenir.
+                }
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try after sometimes.');
+            }
+        });
+    }
+
+    //Sayfa yuklendiginde mevcut oda kismini getirir
+    function LoadRoomDetails() {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'html',
+            contentType: false,
+            processData: false,
+            url: '/Room/GetAllRooms',
+            success: function (data) {
+                $("#divLoadRoomDetails").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request.');
+            }
+        });
+    }
+
+    function SaveRoomData() {
+        var formData = new FormData();
+        formData.append("RoomId", $("#txtRoomId").val());
+        formData.append("RoomNumber", $("#txtRoomNumber").val());
+        formData.append("RoomPrice", $("#txtRoomPrice").val());
+        formData.append("BookingStatusId", $("#ddBookingStatus").val());
+        formData.append("RoomTypeId", $("#ddRoomType").val());
+        formData.append("RoomCapacity", $("#txtRoomCapacity").val());
+        formData.append("RoomDescription", $("#txtRoomDescription").val());
+
+        var imageFile = $("#UploadImage").get(0).files[0];
+        if (imageFile) {
+            formData.append("Image", imageFile);
+        }
+
+        $.ajax({
+            async: true,
+            type: 'POST',
+            url: '/Room/SaveRoom', // SaveRoom eylemine gönderiyoruz
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (data) {
+                if (data.success) {
+                    alert(data.message);
+                    ResetRoomInformation();
+                    LoadRoomDetails();
+                    $("#divAddRoom").modal('hide');
+                } else {
+                    alert(data.message); // Başarısız olursa mesajı göster
+                }
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try after sometimes.');
+            }
+        });
+    }
+
+
+    function ResetRoomInformation() {
+        $("#txtRoomId").val("0");
+        $("#txtRoomNumber").val("");
+        $("#txtRoomPrice").val("");
+        $("#ddBookingStatus").val("");
+        $("#ddRoomType").val("");
+        $("#txtRoomCapacity").val("");
+        $("#txtRoomDescription").val("");
+        $("#UploadImage").val("");
+        $("#imgRoom").attr('src', "");
+        $("#btnSave").text("Add");
+    }
+
+
+    function DisplayImage(result) {
+        @*if blogu ile dosyanin secilip secilmedigi kontrol edilir.True ise girer.*@
+        if (result.files && result.files[0]) {
+            var fileReader = new FileReader();
+            @* Dosyanin secilip imgRoom adli id'de gozukmesini saglar. imgRoom asagida belirtildi*@
+            fileReader.onload = function (e) {
+                $("#imgRoom").attr('src', e.target.result);
+            }
+            @* Dosya okunduktan sonra URL formatında Base64'e dondurulur' *@
+            fileReader.readAsDataURL(result.files[0]);
+        }
+    }
+</script>
+
+
+
+
+<!-- Index sayfasi frontEnd kisim olarak dusunebilirsin. Bu sayfa ile Add Room butonundan sonra acilan form kismini olusturduk -->
+<div style="margin-top: 50px">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divAddRoom" data-backdrop="static" data-keyboard="false">Add Room</button>
+</div>
+
+<div id="divAddRoom" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Room</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formRoom" enctype="multipart/form-data">
+
+                    <div class="container">
+                        @Html.HiddenFor(model => model.RoomId, new { @id = "txtRoomId" })
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.RoomNumber)
+                                @Html.TextBoxFor(expression: model => model.RoomNumber, htmlAttributes: new { @class = "form-control", id = "txtRoomNumber"})
+                                @Html.ValidationMessageFor(model => model.RoomNumber, null, new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.RoomPrice)
+                                @Html.TextBoxFor(expression: model => model.RoomPrice, htmlAttributes: new { @class = "form-control", id = "txtRoomPrice", @Value = " " })
+                                @Html.ValidationMessageFor(model => model.RoomPrice, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.BookingStatusId)
+                                @Html.DropDownListFor(expression: model => model.BookingStatusId, selectList: Model.ListOfBookingStatus, htmlAttributes: new { @class = "form-control", id = "ddBookingStatus" })
+                                @Html.ValidationMessageFor(model => model.BookingStatusId, null, new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                @*DropDownListFor ile birkac senecek gozuktu. Ayrıca bu seceneklerin gozukmesi icin selectList kullandik*@
+                                @Html.LabelFor(expression: model => model.RoomTypeId)
+                                @Html.DropDownListFor(expression: model => model.RoomTypeId, selectList: Model.ListOfRoomType, htmlAttributes: new { @class = "form-control", id = "ddRoomType" })
+                                @Html.ValidationMessageFor(model => model.RoomTypeId, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.RoomCapacity)
+                                @Html.TextBoxFor(expression: model => model.RoomCapacity, htmlAttributes: new { @class = "form-control", id = "txtRoomCapacity", @Value = " " })
+                                @Html.ValidationMessageFor(model => model.RoomCapacity, null, new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.RoomDescription)
+                                @Html.TextBoxFor(expression: model => model.RoomDescription, htmlAttributes: new { @class = "form-control", id = "txtRoomDescription"})
+                                @Html.ValidationMessageFor(model => model.RoomDescription, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(expression: model => model.RoomImage)
+                                @*onchange ile resim yukledigimizde alttaki kucuk kutucugun icine resim gelmesini sagladik. Ayrıca bunun icin DisplayImage fonksiyonu olusturuldu.*@
+                                @*DisplayImage icine result yazmadik. Cunku result yukarıda fonksiyon icinde tanımlı.*@
+                                <input id="UploadImage" type="file" class="form-control" name="roomImage" title="Load Image" onchange="DisplayImage(this)">
+                                <img id="imgRoom" height="200" width="200" style="border:solid" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button id="btnSave" type="button" class="btn btn-success">Save</button> &nbsp;
+                    <button id="divAddRoom" type="button" data-bs-dismiss="modal" class="btn btn-danger">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height: 70px; width: 70px"></div>
+<div id="divLoadRoomDetails"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
