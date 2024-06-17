@@ -1,4 +1,6 @@
-﻿using System.Linq;
+// Form verilerini alır, doğrular, veritabanında kontrol eder
+// ve sonuç olarak kullanıcıyı yönlendirir veya hata mesajları ile aynı view'ı tekrar gösterir.
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebAppHotelManagement.Models;
@@ -10,11 +12,19 @@ namespace WebAppHotelManagement.Controllers
     {
         private HotelDBEntities1 db = new HotelDBEntities1();
 
+        //Erisim saglanir demek
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
+
+        //ValidateAntiForgeryToken'ın amacı guvenlik.
+        //Sunucu, bir form oluşturulduğunda benzersiz bir anti-forgery token (doğrulama token'ı) oluşturur ve bu token'ı formun içine ekler.
+        //Form gönderildiğinde, sunucu bu token'ı doğrular ve token geçerliyse isteği işler.
+        //PasswordHash ve passwordSalt güvenli bir şekilde şifre saklamak için kullanılır.
+        //return View(model): Eğer model doğrulama kurallarına uymuyorsa,
+        //aynı view'a model ile birlikte geri döner ve kullanıcıya hata mesajlarını gösterir.
 
         [HttpPost]
         [AllowAnonymous]
@@ -24,7 +34,8 @@ namespace WebAppHotelManagement.Controllers
             if (ModelState.IsValid)
             {
                 CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
+                
+                //Veriler user nesnesine kaydedilir
                 var user = new User
                 {
                     UserName = model.UserName,
@@ -38,7 +49,7 @@ namespace WebAppHotelManagement.Controllers
                 db.Users.Add(user);
                 db.SaveChanges();
 
-                return RedirectToAction("Login");
+                return RedirectToAction("Login"); //Basrili ise Login yonlendirilir
             }
             return View(model);
         }
@@ -49,6 +60,14 @@ namespace WebAppHotelManagement.Controllers
             return View();
         }
 
+        //!VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt):
+        //VerifyPasswordHash metodu, kullanıcının girdiği şifreyi veritabanındaki PasswordHash ve PasswordSalt değerleri ile karşılaştırır.
+        //Eğer şifreler uyuşmazsa false döner.
+        // SingleOrDefault belirtilen koşula uyan tek bir öğeyi döndürür.
+        // Eğer belirtilen koşula uyan öğe yoksa, null döner. Eğer birden fazla öğe bulunursa, bir hata fırlatır.
+        //FormsAuthentication.SetAuthCookie kimlik bilgilerini sakalr bir sonraki giris icin
+        //retrunView hata yapıldıgında aynı sayfaya gosterilmesini saglıyor
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -56,7 +75,7 @@ namespace WebAppHotelManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = db.Users.SingleOrDefault(u => u.Email == model.Email);
+                var user = db.Users.SingleOrDefault(u => u.Email == model.Email); //u fromdaki, model veri tabanı
                 if (user == null || !VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -79,7 +98,7 @@ namespace WebAppHotelManagement.Controllers
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
-                passwordSalt = hmac.Key;
+                passwordSalt = hmac.Key;   //rastgele deger, her şifre için farklı bir salt oluşturur.
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
@@ -91,6 +110,7 @@ namespace WebAppHotelManagement.Controllers
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
                 {
+                    //herhangi bir byte farklıysa, şifre yanlış demektir ve false döner.
                     if (computedHash[i] != storedHash[i]) return false;
                 }
             }
