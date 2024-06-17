@@ -8,7 +8,7 @@
 
 @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()  //guvenlik anti token
 
     <div class="form-horizontal">
         <hr />
