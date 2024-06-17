@@ -34,22 +34,22 @@ This Hotel Management System is a web application developed using C# and the MVC
 
 ## Screenshots
 ### User Registration
-![Register Page](./images/1 - register.png)
+![1 - register](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/729398f8-223f-46c6-a1ed-a30f853088bc)
 
 ### Room Management - Add Room
-![Add Room](./images/2 - add room.png)
+![2 - add room](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/63f1d807-53cb-4e6a-b0ff-5d132e01d4db)
 
 ### Add Room Form
-![Add Room Form](./images/4 - add room form.png)
+![4 - add room form](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/120ecf48-93bd-4262-a750-ff6d1b762366)
 
 ### Update Room
-![Update Room](./images/5 - update.png)
+![5 - update](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/3f2a8e3d-0004-4a44-a4ab-32517ec0d011)
 
 ### Database Room Table
-![Database Room](./images/6 - database room.png)
+![6 - database room](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/5581dbc7-654c-489e-b524-b0f9914ca882)
 
 ### Database Diagram
-![Database Diagram](./images/database_diagram.png)
+![database_diagram](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/4b7ae8f4-bdc4-4976-81c2-b0ed935bab39)
 
 ## Usage
 - Register a new user or log in with existing credentials.
