@@ -25,7 +25,6 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Room", "Index", "Room", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Booking", "Index", "Booking", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Logout", "Logout", "Account", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else
