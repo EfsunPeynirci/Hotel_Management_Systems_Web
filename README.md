@@ -23,15 +23,6 @@ This Hotel Management System is a web application developed using C# and the MVC
 - **Database:** Microsoft SQL Server (MSSQL)
 - **Front-end:** HTML, CSS
 
-## Installation
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/hotel-management-system.git
-    ```
-2. Open the solution file in Visual Studio.
-3. Update the database connection string in `Web.config` to match your MSSQL server settings.
-4. Run the application using Visual Studio.
-
 ## Screenshots
 ### User Registration
 ![1 - register](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/729398f8-223f-46c6-a1ed-a30f853088bc)
