@@ -61,3 +61,13 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Indicate that the main language of the project is C#
+*.cs linguist-language=C#
+*.cshtml linguist-language=HTML
+*.config linguist-language=XML
+*.xml linguist-language=XML
+*.js linguist-language=JavaScript
+*.css linguist-language=CSS
+*.html linguist-language=HTML
+
