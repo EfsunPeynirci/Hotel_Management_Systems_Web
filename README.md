@@ -3,6 +3,8 @@
 ## Project Overview
 This Hotel Management System is a web application developed using C# and the MVC5 framework. The backend database is managed using Microsoft SQL Server (MSSQL). The application provides functionalities for user registration, login, room management, and user logout.
 
+This project was developed as part of my Erasmus program at Kolegji Universum International College Powered By Arizona State University in Kosovo. It was a team effort and was presented for the Database Management Systems and C# Laboratory Programming courses.
+
 ## Features
 - **User Registration and Login:**
   - Users can register and login to the system.
