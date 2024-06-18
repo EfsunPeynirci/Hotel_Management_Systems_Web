@@ -49,6 +49,12 @@ This Hotel Management System is a web application developed using C# and the MVC
 5. Run the application using Visual Studio.
 
 ## Screenshots
+### Home
+![home](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/d953596a-dabc-4599-8b68-a5bb5c816c44)
+
+### User Log In
+![login](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/26bf6aec-58c1-4ccf-b1cf-8330173e6de1)
+
 ### User Registration
 ![1 - register](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/729398f8-223f-46c6-a1ed-a30f853088bc)
 
