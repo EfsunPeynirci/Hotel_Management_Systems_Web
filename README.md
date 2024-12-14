@@ -1,11 +1,13 @@
-# Hotel Management System
+# 🏠 Hotel Management System
 
-## Project Overview
+## 🌟 Project Overview
 This Hotel Management System is a web application developed using C# and the MVC5 framework. The backend database is managed using Microsoft SQL Server (MSSQL). The application provides functionalities for user registration, login, room management, and user logout.
 
 This project was developed as part of my Erasmus program at Kolegji Universum International College Powered By Arizona State University in Kosovo. It was a team effort and was presented for the Database Management Systems and C# Laboratory Programming courses.
 
-## Features
+---
+
+## 🚀 Features
 - **User Registration and Login:**
   - Users can register and login to the system.
   - Upon successful login, the navigation bar updates to include 'Room' and 'Logout' options, while 'Login' and 'Sign Up' are hidden.
@@ -19,38 +21,25 @@ This project was developed as part of my Erasmus program at Kolegji Universum In
 - **Logout:**
   - Users can log out, which will revert the navigation bar to display 'Login' and 'Sign Up' options.
 
-## Technologies Used
+---
+
+## 🛠️ Technologies Used
 - **Programming Language:** C#
 - **Framework:** MVC5
 - **Database:** Microsoft SQL Server (MSSQL)
 - **Front-end:** HTML, CSS
 
-## Installation
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/EfsunPeynirci/WebAppHotelManagement
-    ```
-2. Open the solution file in Visual Studio.
-3. Create a `Web.config` file in the root directory of the project with the following content:
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <system.web>
-        <compilation debug="true" targetFramework="4.7.2" />
-        <httpRuntime targetFramework="4.7.2" />
-        <authentication mode="Forms">
-          <forms loginUrl="~/Account/Login" timeout="2880" />
-        </authentication>
-        <authorization>
-          <allow users="*" />
-        </authorization>
-      </system.web>
-    </configuration>
-    ```
-4. Update the database connection string in `Web.config` to match your MSSQL server settings.
-5. Run the application using Visual Studio.
+---
 
-## Screenshots
+## 💡 Usage
+- Register a new user or log in with existing credentials.
+- Navigate to the 'Room' section to manage room records.
+- Add new rooms, update existing room details, or delete rooms.
+- Log out when finished.
+
+---
+
+## 📸 Screenshots
 ### Home Page
 ![home](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/d953596a-dabc-4599-8b68-a5bb5c816c44)
 
@@ -75,13 +64,38 @@ This project was developed as part of my Erasmus program at Kolegji Universum In
 ### Database Diagram
 ![database_diagram](https://github.com/EfsunPeynirci/WebAppHotelManagement/assets/100719856/4b7ae8f4-bdc4-4976-81c2-b0ed935bab39)
 
-## Usage
-- Register a new user or log in with existing credentials.
-- Navigate to the 'Room' section to manage room records.
-- Add new rooms, update existing room details, or delete rooms.
-- Log out when finished.
+---
 
-## Acknowledgements
+---
+
+## 📦 Installation
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/EfsunPeynirci/WebAppHotelManagement
+    ```
+2. Open the solution file in Visual Studio.
+3. Create a `Web.config` file in the root directory of the project with the following content:
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <configuration>
+      <system.web>
+        <compilation debug="true" targetFramework="4.7.2" />
+        <httpRuntime targetFramework="4.7.2" />
+        <authentication mode="Forms">
+          <forms loginUrl="~/Account/Login" timeout="2880" />
+        </authentication>
+        <authorization>
+          <allow users="*" />
+        </authorization>
+      </system.web>
+    </configuration>
+    ```
+4. Update the database connection string in `Web.config` to match your MSSQL server settings.
+5. Run the application using Visual Studio.
+
+---
+
+## 🙏 Acknowledgements
 - Thanks to the MVC5 and C# communities for their excellent documentation and support.
 - Special thanks to the YouTube tutorial by Tek Tuition which guided me through this project. [YouTube Playlist](https://www.youtube.com/watch?v=u-p7V6Yc0NM&list=PL8weiNcho1j7My1wL2cZzSMaJFhqna0BA)
 
